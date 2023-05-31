@@ -1,3 +1,3 @@
 ﻿  Plansza.cpp
-L:\Repos\Game_kulki\Game\Game\Plansza.cpp(26,15): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
-  Game.vcxproj -> L:\Repos\Game_kulki\Game\x64\Debug\Game.exe
+E:\repos\Game\Game\Plansza.cpp(36,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Game.vcxproj -> E:\repos\Game\x64\Debug\Game.exe

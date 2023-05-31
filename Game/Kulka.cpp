@@ -1,22 +1,26 @@
 #include "Kulka.h"
 #include <cstddef>
 
-Kulka::Kulka() {
+Kulka::Kulka():czy_wolne(true) {
 	this->kolor = {NULL};
-	this->czy_wolne = true;
 }
 
-Kulka::Kulka(char kolor) {
+Kulka::Kulka(char kolor):czy_wolne(false) {
 	this->kolor = kolor;
-	this->czy_wolne = false;
 }
 
 char Kulka::getKolor() const {
 	return kolor;
 }
 
-void Kulka::setKolor(char kolor) {
-	kolor = kolor;
+void Kulka::setKolor(char _kolor) {
+	this->kolor = _kolor;
 }
 
+bool Kulka::getCzy_wolne() {
+	return czy_wolne;
+}
 
+void Kulka::setCzy_wolne(bool t) {
+	this->czy_wolne = t;
+}

@@ -5,11 +5,11 @@
 #include "Kulka.h"
 
 class Plansza {
-public:
+private:
 	static const int ROZMIAR_PLANSZY = 9;
 	Kulka* pole[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];
-
 public:
+	Kulka* getPole(int row, int col);
 	Plansza();
 	~Plansza();
 	void wypelnijLosowo();

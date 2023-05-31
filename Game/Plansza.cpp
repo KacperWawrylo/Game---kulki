@@ -3,6 +3,7 @@
 #include <ctime>
 #include <ctime>
 #include "Plansza.h"
+#include <queue>
 
 using namespace std;
 
@@ -22,6 +23,15 @@ Plansza::~Plansza() {
     }
 }
 
+Kulka* Plansza::getPole(int row, int col) {
+    if (row >= 0 && row < ROZMIAR_PLANSZY && col >= 0 && col < ROZMIAR_PLANSZY) {
+        return pole[row][col];
+    }
+    else {
+        return nullptr;
+    }
+}
+
 void Plansza::wypelnijLosowo() {
     srand(time(NULL));
 
@@ -31,10 +41,10 @@ void Plansza::wypelnijLosowo() {
         do {
             i = rand() % ROZMIAR_PLANSZY;
             j = rand() % ROZMIAR_PLANSZY;
-        } while (pole[i][j]->czy_wolne == false);
+        } while (pole[i][j]->getCzy_wolne() == false);
 
-        pole[i][j]->czy_wolne = false;
-        pole[i][j]->kolor = kolor;
+        pole[i][j]->setCzy_wolne(false);
+        pole[i][j]->setKolor(kolor);
     }
 }
 
@@ -52,11 +62,11 @@ void Plansza::wyswietl() {
     for (int i = 0; i < ROZMIAR_PLANSZY; i++) {
         cout << i + 1 << " |";
         for (int j = 0; j < ROZMIAR_PLANSZY; j++) {
-            if (pole[i][j]->czy_wolne) {
+            if (pole[i][j]->getCzy_wolne()) {
                 cout << " ";
             }
             else {
-                cout << pole[i][j]->kolor;
+                cout << pole[i][j]->getKolor();
             }
             cout << "|";
         }
@@ -80,36 +90,22 @@ bool Plansza::czyMozliweRuchy(int row, int col, int new_row, int new_col) {
     if (new_row < 0 || new_row >= ROZMIAR_PLANSZY || new_col < 0 || new_col >= ROZMIAR_PLANSZY) {
         return false;
     }
-    if (!pole[new_row][new_col]->czy_wolne) {
+    if (!pole[new_row][new_col]->getCzy_wolne()) {
         return false;
     }
-    //if (row == new_row) { // poruszanie siê w tej samej linii
-    //    int direction = (new_col > col) ? 1 : -1; // ustalenie kierunku ruchu
-    //    for (int i = col + direction; i != new_col; i += direction) {
-    //        if (pole[row][i]->czy_wolne != false) {
-    //            return false;
-    //        }
-    //    }
-    //}
-    //else if (col == new_col) { // poruszanie siê w tej samej kolumnie
-    //    int direction = (new_row > row) ? 1 : -1; // ustalenie kierunku ruchu
-    //    for (int i = row + direction; i != new_row; i += direction) {
-    //        if (pole[i][col]->czy_wolne != false) {
-    //            return false;
-    //        }
-    //    }
-    //}
+   
     return true;
 }
 
 bool Plansza::czyPiecKulek() {
-    for (int i = 0; i < ROZMIAR_PLANSZY; i++) { //sprawdzenie w poziomie
+    //sprawdzenie w poziomie
+    for (int i = 0; i < ROZMIAR_PLANSZY; i++) { 
         for (int j = 0; j <= ROZMIAR_PLANSZY - 5; j++) {
-            char kolor = pole[i][j]->kolor;
+            char kolor = pole[i][j]->getKolor();
             if (kolor != NULL) {
                 bool wygrana = true;
                 for (int k = 1; k < 5; k++) {
-                    if (pole[i][j + k]->kolor != kolor) {
+                    if (pole[i][j + k]->getKolor() != kolor) {
                         wygrana = false;
                         break;
                     }
@@ -124,14 +120,14 @@ bool Plansza::czyPiecKulek() {
             }
         }
     }
-
-    for (int i = 0; i <= ROZMIAR_PLANSZY - 5; i++) { //sprawdzenie w pionie
+    //sprawdzenie w pionie
+    for (int i = 0; i <= ROZMIAR_PLANSZY - 5; i++) { 
         for (int j = 0; j < ROZMIAR_PLANSZY; j++) {
-            char kolor = pole[i][j]->kolor;
+            char kolor = pole[i][j]->getKolor();
             if (kolor != NULL) {
                 bool wygrana = true;
                 for (int k = 1; k < 5; k++) {
-                    if (pole[i + k][j]->kolor != kolor) {
+                    if (pole[i + k][j]->getKolor() != kolor) {
                         wygrana = false;
                         break;
                     }
@@ -146,6 +142,51 @@ bool Plansza::czyPiecKulek() {
             }
         }
     }
+
+    // sprawdzenie ukosne kombinacje (w prawo-dol)
+    for (int i = 0; i <= ROZMIAR_PLANSZY - 5; i++) {
+        for (int j = 0; j <= ROZMIAR_PLANSZY - 5; j++) {
+            char kolor = pole[i][j]->getKolor();
+            if (kolor != NULL) {
+                bool wygrana = true;
+                for (int k = 1; k < 5; k++) {
+                    if (pole[i + k][j + k]->getKolor() != kolor) {
+                        wygrana = false;
+                        break;
+                    }
+                }
+                if (wygrana) {
+                    for (int k = 0; k < 5; k++) {
+                        pole[i + k][j + k] = new Kulka;
+                    }
+                    return true;
+                }
+            }
+        }
+    }
+
+    // SprawdŸ ukosne kombinacje (w prawo-gora)
+    for (int i = 4; i < ROZMIAR_PLANSZY; i++) {
+        for (int j = 0; j <= ROZMIAR_PLANSZY - 5; j++) {
+            char kolor = pole[i][j]->getKolor();
+            if (kolor != NULL) {
+                bool wygrana = true;
+                for (int k = 1; k < 5; k++) {
+                    if (pole[i - k][j + k]->getKolor() != kolor) {
+                        wygrana = false;
+                        break;
+                    }
+                }
+                if (wygrana) {
+                    for (int k = 0; k < 5; k++) {
+                        pole[i - k][j + k] = new Kulka;
+                    }
+                    return true;
+                }
+            }
+        }
+    }
+
     return false;
 }
 
@@ -156,7 +197,7 @@ bool Plansza::czyPelna() {
     int n = 0;
     for (int i = 0; i < ROZMIAR_PLANSZY; i++) {
         for (int j = 0; j < ROZMIAR_PLANSZY; j++) {
-            if (pole[i][j]->czy_wolne) {
+            if (pole[i][j]->getCzy_wolne()) {
                 n++;
             }
         }
@@ -192,7 +233,7 @@ bool Plansza::czyTrzyMiejsca() {
     int n = 0;
     for (int i = 0; i < ROZMIAR_PLANSZY; i++) {
         for (int j = 0; j < ROZMIAR_PLANSZY; j++) {
-            if (pole[i][j]->czy_wolne) {
+            if (pole[i][j]->getCzy_wolne()) {
                 n++;
             }
         }

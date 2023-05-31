@@ -3,15 +3,16 @@
 #define GAME_H
 
 #include"Plansza.h"
+#include <string>
 
 class Game {
-public:
+private:
+    std::string nick;
     Plansza plansza;
     int wynik;
-
 public:
     Game();
-
+    void zapiszDoPliku();
     void graj();
 
 };
