@@ -15,6 +15,7 @@ public:
 	void wypelnijLosowo();
 	void wyswietl();
 	bool czyMozliweRuchy(int row, int col, int new_row, int new_col);
+	bool czyPiecKulek();
 	bool czyPelna();
 	bool czyLinia(int x1, int y1, int x2, int y2);
 	void usunLinie(int x1, int y1, int x2, int y2);

@@ -28,7 +28,11 @@ void Game::graj() {
                 // Implement your move logic here
                 // ...
                 plansza.przestawKulke(startRow, startCol, endRow, endCol);
-                wynik += 1;  // Increment the score for each removed ball
+                if(plansza.czyPiecKulek()){
+                    cout << "Zbito piec Kulek !" << endl;
+                    wynik += 1;
+                    continue;
+                }
                 if (!plansza.czyTrzyMiejsca()) {
                     cout << "Koniec gry! Plansza jest pelna." << endl;
                     break;
