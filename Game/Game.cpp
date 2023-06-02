@@ -37,23 +37,28 @@ void Game::graj() {
         endRow--;
         endCol--;
         system("cls");
-        if (plansza.getPole(startRow, startCol)->getCzy_wolne() == false) {
-            if (plansza.czyMozliweRuchy(startRow, startCol, endRow, endCol)) {
-                // Perform the move and update the score
-                // Implement your move logic here
-                // ...
-                plansza.przestawKulke(startRow, startCol, endRow, endCol);
-                if(plansza.czyPiecKulek()){
-                    cout << "Zbito piec Kulek!" << endl;
-                    wynik += 5;
-                    continue;
+        if (startRow >= 0 && startRow < plansza.getRozmiar() && startCol >= 0 && startCol < plansza.getRozmiar()) {
+            if (plansza.getPole(startRow, startCol)->getCzy_wolne() == false) {
+                if (plansza.czyMozliweRuchy(startRow, startCol, endRow, endCol)) {
+                    // Perform the move and update the score
+                    // Implement your move logic here
+                    // ...
+                    plansza.przestawKulke(startRow, startCol, endRow, endCol);
+                    if (plansza.czyPiecKulek()) {
+                        cout << "Zbito piec Kulek!" << endl;
+                        wynik += 5;
+                        continue;
+                    }
+                    if (!plansza.czyTrzyMiejsca()) {
+                        cout << "Koniec gry! Plansza jest pelna." << endl;
+                        zapiszDoPliku();
+                        break;
+                    }
+                    plansza.wypelnijLosowo();
                 }
-                if (!plansza.czyTrzyMiejsca()) {
-                    cout << "Koniec gry! Plansza jest pelna." << endl;
-                    zapiszDoPliku();
-                    break;
+                else {
+                    cout << "Niepoprawny ruch. Sprobuj ponownie." << endl;
                 }
-                plansza.wypelnijLosowo();
             }
             else {
                 cout << "Niepoprawny ruch. Sprobuj ponownie." << endl;
@@ -62,7 +67,6 @@ void Game::graj() {
         else {
             cout << "Niepoprawny ruch. Sprobuj ponownie." << endl;
         }
-        
         if (plansza.czyPelna()) {
             cout << "Koniec gry! Plansza jest pelna." << endl;
             zapiszDoPliku();

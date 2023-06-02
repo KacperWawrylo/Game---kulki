@@ -10,6 +10,7 @@ private:
 	Kulka* pole[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];
 public:
 	Kulka* getPole(int row, int col);
+	const int getRozmiar();
 	Plansza();
 	~Plansza();
 	void wypelnijLosowo();

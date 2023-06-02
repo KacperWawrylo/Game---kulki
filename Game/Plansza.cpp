@@ -24,12 +24,11 @@ Plansza::~Plansza() {
 }
 
 Kulka* Plansza::getPole(int row, int col) {
-    if (row >= 0 && row < ROZMIAR_PLANSZY && col >= 0 && col < ROZMIAR_PLANSZY) {
-        return pole[row][col];
-    }
-    else {
-        return nullptr;
-    }
+    return pole[row][col];
+}
+
+const int Plansza::getRozmiar() {
+    return ROZMIAR_PLANSZY;
 }
 
 void Plansza::wypelnijLosowo() {
