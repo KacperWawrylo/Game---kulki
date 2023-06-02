@@ -14,7 +14,6 @@ public:
     Game();
     void zapiszDoPliku();
     void graj();
-
 };
 
 #endif

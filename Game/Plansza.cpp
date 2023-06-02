@@ -1,11 +1,20 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <ctime>
 #include "Plansza.h"
-#include <queue>
+#include <vector>
 
 using namespace std;
+
+struct koordynaty {
+    int x;
+    int y;
+    koordynaty(int x = 0, int y = 0): x(x), y(y){
+    }
+    bool operator==(const koordynaty& left) const {
+        return (x == left.x && y == left.y);
+    }
+};
 
 Plansza::Plansza() {
     for (int i = 0; i < ROZMIAR_PLANSZY; i++) {
@@ -92,8 +101,57 @@ bool Plansza::czyMozliweRuchy(int row, int col, int new_row, int new_col) {
     if (!pole[new_row][new_col]->getCzy_wolne()) {
         return false;
     }
-   
-    return true;
+    
+    vector<koordynaty> sprawdzonePola;
+    vector<koordynaty> polaDoSprawdzenia;
+
+    koordynaty kierunki[4] = { {0, 1}, {1, 0}, {-1, 0}, {0, -1} };
+    vector<koordynaty> wolnePola;
+    for (int i = 0; i < 4; ++i) {
+        if (row + kierunki[i].x < 0 || row + kierunki[i].x >= ROZMIAR_PLANSZY || col + kierunki[i].y < 0 || col + kierunki[i].y >= ROZMIAR_PLANSZY)
+            continue;
+        if (pole[row + kierunki[i].x][col + kierunki[i].y]->getCzy_wolne())
+            wolnePola.push_back({ row + kierunki[i].x , col + kierunki[i].y });
+    }
+
+    //c++ nie oferuje prostej metody dodania dwoch wektorow do siebie, wiec trzeba zrobic to w ten sposób.
+    polaDoSprawdzenia.insert(polaDoSprawdzenia.end(), wolnePola.begin(), wolnePola.end());
+    wolnePola.clear();
+
+    //dopóki nam pozosta³y pola do sprawdzenia
+    while (polaDoSprawdzenia.size() > 0) {
+        //sprawdzenie czy to jest pole do którego chcemy dotrzeæ
+        if (polaDoSprawdzenia[0].x == new_row && polaDoSprawdzenia[0].y == new_col) {
+            return true;
+        }
+        //w innym wypadku sprawdŸmy pola doko³a obecnie sprawdzonego pola
+        for (int i = 0; i < 4; ++i) {
+            if (polaDoSprawdzenia[0].x + kierunki[i].x < 0 || polaDoSprawdzenia[0].x + kierunki[i].x >= ROZMIAR_PLANSZY || polaDoSprawdzenia[0].y + kierunki[i].y < 0 || polaDoSprawdzenia[0].y + kierunki[i].y >= ROZMIAR_PLANSZY)
+                continue;
+            if (pole[polaDoSprawdzenia[0].x + kierunki[i].x][polaDoSprawdzenia[0].y + kierunki[i].y]->getCzy_wolne()) {
+                wolnePola.push_back({ polaDoSprawdzenia[0].x + kierunki[i].x , polaDoSprawdzenia[0].y + kierunki[i].y });
+            }
+        }
+
+        //i dodajmy je do pól do sprawdzenia
+        polaDoSprawdzenia.insert(polaDoSprawdzenia.end(), wolnePola.begin(), wolnePola.end());
+        wolnePola.clear();
+
+        //dodajmy obecne pole do sprawdzonych pol
+        sprawdzonePola.push_back(polaDoSprawdzenia[0]);
+
+        //usunmy z pól do sprawdzenia wszystkie sprawdzone pola.
+        for (int i = 0; i < sprawdzonePola.size(); ++i) {
+            for (int j = 0; j < polaDoSprawdzenia.size(); ++j) {
+                if (sprawdzonePola[i] == polaDoSprawdzenia[j]) {
+                    polaDoSprawdzenia.erase(polaDoSprawdzenia.begin() + j);
+                    --j;
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 bool Plansza::czyPiecKulek() {
@@ -190,9 +248,6 @@ bool Plansza::czyPiecKulek() {
 }
 
 bool Plansza::czyPelna() {
-    // Sprawdzenie, czy plansza jest ju¿ pe³na (brak pustych pól)
-    // Zwraca true, jeœli plansza jest pe³na, w przeciwnym razie false.
-    // Implementacja tego fragmentu nale¿y do Ciebie.
     int n = 0;
     for (int i = 0; i < ROZMIAR_PLANSZY; i++) {
         for (int j = 0; j < ROZMIAR_PLANSZY; j++) {
@@ -207,23 +262,7 @@ bool Plansza::czyPelna() {
     return false;
 }
 
-bool Plansza::czyLinia(int x1, int y1, int x2, int y2) {
-    // Sprawdzenie, czy istnieje linia kulek o tym samym kolorze
-    // pomiêdzy punktami (x1, y1) i (x2, y2)
-    // Zwraca true, jeœli linia istnieje, w przeciwnym razie false.
-    // Implementacja tego fragmentu nale¿y do Ciebie.
-    return false;
-}
-
-void Plansza::usunLinie(int x1, int y1, int x2, int y2) {
-    // Usuniêcie linii kulek o tym samym kolorze
-    // pomiêdzy punktami (x1, y1) i (x2, y2)
-    // Implementacja tego fragmentu nale¿y do Ciebie.
-}
-
 void Plansza::przestawKulke(int x1, int y1, int x2, int y2) {
-    // Przestawienie kulki z pozycji (x1, y1) na pozycjê (x2, y2)
-    // Implementacja tego fragmentu nale¿y do Ciebie.
     pole[x2][y2] = pole[x1][y1];
     pole[x1][y1] = new Kulka;
 }

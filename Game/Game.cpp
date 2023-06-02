@@ -25,24 +25,31 @@ void Game::zapiszDoPliku() {
 
 void Game::graj() {
     while (true) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Aktualny wynik: " << wynik << endl;
         plansza.wyswietl();
         int startRow, startCol, endRow, endCol;
         cout << "Podaj kulke do przesuniecia (row col): ";
-        cin >> startRow >> startCol;
+        while (!(cin >> startRow >> startCol)) {
+            cin.clear();  // Czyœci b³¹d w strumieniu wejœciowym
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Ignoruje pozosta³¹ liniê
+            cout << "Niepoprawne dane. Podaj ponownie: ";
+        }
         startRow--;
         startCol--;
         cout << "W ktore miejsce (row col): ";
-        cin >> endRow >> endCol;
+        while (!(cin >> endRow >> endCol)) {
+            cin.clear();  // Czyœci b³¹d w strumieniu wejœciowym
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Ignoruje pozosta³¹ liniê
+            cout << "Niepoprawne dane. Podaj ponownie: ";
+        }
         endRow--;
         endCol--;
         system("cls");
         if (startRow >= 0 && startRow < plansza.getRozmiar() && startCol >= 0 && startCol < plansza.getRozmiar()) {
             if (plansza.getPole(startRow, startCol)->getCzy_wolne() == false) {
                 if (plansza.czyMozliweRuchy(startRow, startCol, endRow, endCol)) {
-                    // Perform the move and update the score
-                    // Implement your move logic here
-                    // ...
                     plansza.przestawKulke(startRow, startCol, endRow, endCol);
                     if (plansza.czyPiecKulek()) {
                         cout << "Zbito piec Kulek!" << endl;
