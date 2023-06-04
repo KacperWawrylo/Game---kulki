@@ -90,11 +90,6 @@ void Plansza::wyswietl() {
 }
 
 bool Plansza::czyMozliweRuchy(int row, int col, int new_row, int new_col) {
-    // Sprawdzenie, czy istnieje mo¿liwoœæ wykonania ruchu
-    // (czy istnieje linia piêciu lub wiêcej kulek do usuniêcia)
-    // Zwraca true, jeœli mo¿liwe s¹ ruchy, w przeciwnym razie false.
-    // Implementacja tego fragmentu nale¿y do Ciebie.
-    
     if (new_row < 0 || new_row >= ROZMIAR_PLANSZY || new_col < 0 || new_col >= ROZMIAR_PLANSZY) {
         return false;
     }
@@ -114,7 +109,6 @@ bool Plansza::czyMozliweRuchy(int row, int col, int new_row, int new_col) {
             wolnePola.push_back({ row + kierunki[i].x , col + kierunki[i].y });
     }
 
-    //c++ nie oferuje prostej metody dodania dwoch wektorow do siebie, wiec trzeba zrobic to w ten sposób.
     polaDoSprawdzenia.insert(polaDoSprawdzenia.end(), wolnePola.begin(), wolnePola.end());
     wolnePola.clear();
 

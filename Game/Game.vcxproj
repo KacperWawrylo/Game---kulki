@@ -131,11 +131,13 @@
     <ClCompile Include="Kulka.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Plansza.cpp" />
+    <ClCompile Include="PlanszaNumery.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="Kulka.h" />
     <ClInclude Include="Plansza.h" />
+    <ClInclude Include="PlanszaNumery.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

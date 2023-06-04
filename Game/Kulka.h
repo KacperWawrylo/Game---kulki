@@ -1,6 +1,4 @@
 #pragma once
-#ifndef KULKA_H
-#define KULKA_H
 
 class Kulka {
 private:
@@ -15,5 +13,4 @@ public:
 	void setCzy_wolne(bool t);
 };
 
-#endif
 

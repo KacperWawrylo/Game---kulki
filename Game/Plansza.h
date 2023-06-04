@@ -1,6 +1,4 @@
 #pragma once
-#ifndef PLANSZA_H
-#define PLANSZA_H
 
 #include "Kulka.h"
 
@@ -13,7 +11,7 @@ public:
 	const int getRozmiar();
 	Plansza();
 	~Plansza();
-	void wypelnijLosowo();
+	virtual void wypelnijLosowo();
 	void wyswietl();
 	bool czyMozliweRuchy(int row, int col, int new_row, int new_col);
 	bool czyPiecKulek();
@@ -22,6 +20,5 @@ public:
 	bool czyTrzyMiejsca();
 };
 
-#endif
 
 

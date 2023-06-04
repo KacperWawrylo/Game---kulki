@@ -1,2 +1,9 @@
 ﻿  Game.cpp
+  Kulka.cpp
+  Plansza.cpp
+E:\repos\Game\Game\Plansza.cpp(44,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  PlanszaNumery.cpp
+E:\repos\Game\Game\PlanszaNumery.cpp(6,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  main.cpp
+  Generating Code...
   Game.vcxproj -> E:\repos\Game\x64\Debug\Game.exe
